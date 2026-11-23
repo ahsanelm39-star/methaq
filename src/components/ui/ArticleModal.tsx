@@ -57,11 +57,26 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) 
           </div>
 
           <div className="modal-content-paragraphs">
-            {article.content.map((p, index) => (
-              <p key={index} className="modal-paragraph">
-                {p}
-              </p>
-            ))}
+            {article.sections ? (
+              article.sections.map((section, sIndex) => (
+                <div key={sIndex} className="modal-section-block">
+                  <h4 style={{ color: 'var(--text-accent)', marginBottom: '0.5rem' }}>
+                    {section.heading}
+                  </h4>
+                  {section.paragraphs.map((p, pIndex) => (
+                    <p key={pIndex} className="modal-paragraph">
+                      {p}
+                    </p>
+                  ))}
+                </div>
+              ))
+            ) : article.content ? (
+              article.content.map((p: string, index: number) => (
+                <p key={index} className="modal-paragraph">
+                  {p}
+                </p>
+              ))
+            ) : null}
           </div>
 
           <div className="modal-takeaways-box">

@@ -14,7 +14,7 @@ export const Values: React.FC = () => {
   const activeVal = VALUES_SECTION.values[activeValueIndex];
   const sectionRef = useRef<HTMLElement>(null);
 
-  const icons = [<Shield size={24} />, <Target size={24} />, <Award size={24} />];
+  const icons = [<Shield key="shield" size={24} />, <Target key="target" size={24} />, <Award key="award" size={24} />];
 
   useEffect(() => {
     const ctx = gsap.context(() => {

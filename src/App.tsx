@@ -1,93 +1,211 @@
-import React, { useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useState, lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
-import { Hero } from './components/sections/Hero';
-import { Positioning } from './components/sections/Positioning';
-import { About } from './components/sections/About';
-import { PracticeAreas } from './components/sections/PracticeAreas';
-import { WhyUs } from './components/sections/WhyUs';
-import { Methodology } from './components/sections/Methodology';
-import { Team } from './components/sections/Team';
-import { Values } from './components/sections/Values';
-import { Insights } from './components/sections/Insights';
-import { FAQ } from './components/sections/FAQ';
-import { CTA } from './components/sections/CTA';
-import { Contact } from './components/sections/Contact';
+import { ScrollToTop } from './components/layout/ScrollToTop';
+import { PageTransition } from './components/layout/PageTransition';
 import { ConsultationModal } from './components/ui/ConsultationModal';
-import { ArticleModal } from './components/ui/ArticleModal';
-import type { InsightArticle } from './types';
 
-gsap.registerPlugin(ScrollTrigger);
+// Route-level code splitting via React.lazy
+const HomePage = lazy(() =>
+  import('./pages/Home/HomePage').then((m) => ({ default: m.HomePage }))
+);
+const AboutPage = lazy(() =>
+  import('./pages/About/AboutPage').then((m) => ({ default: m.AboutPage }))
+);
+const ServicesIndexPage = lazy(() =>
+  import('./pages/Services/ServicesIndexPage').then((m) => ({
+    default: m.ServicesIndexPage,
+  }))
+);
+const ServiceDetailPage = lazy(() =>
+  import('./pages/Services/ServiceDetailPage').then((m) => ({
+    default: m.ServiceDetailPage,
+  }))
+);
+const ApproachPage = lazy(() =>
+  import('./pages/Approach/ApproachPage').then((m) => ({
+    default: m.ApproachPage,
+  }))
+);
+const TeamPage = lazy(() =>
+  import('./pages/Team/TeamPage').then((m) => ({ default: m.TeamPage }))
+);
+const InsightsIndexPage = lazy(() =>
+  import('./pages/Insights/InsightsIndexPage').then((m) => ({
+    default: m.InsightsIndexPage,
+  }))
+);
+const ArticleDetailPage = lazy(() =>
+  import('./pages/Insights/ArticleDetailPage').then((m) => ({
+    default: m.ArticleDetailPage,
+  }))
+);
+const ContactPage = lazy(() =>
+  import('./pages/Contact/ContactPage').then((m) => ({ default: m.ContactPage }))
+);
+const ConsultationPage = lazy(() =>
+  import('./pages/Consultation/ConsultationPage').then((m) => ({
+    default: m.ConsultationPage,
+  }))
+);
+const FAQPage = lazy(() =>
+  import('./pages/FAQ/FAQPage').then((m) => ({ default: m.FAQPage }))
+);
+const PrivacyPage = lazy(() =>
+  import('./pages/Privacy/PrivacyPage').then((m) => ({ default: m.PrivacyPage }))
+);
+const NotFoundPage = lazy(() =>
+  import('./pages/NotFound/NotFoundPage').then((m) => ({
+    default: m.NotFoundPage,
+  }))
+);
+
+// Fallback skeleton loader during route transitions
+const PageLoadingFallback: React.FC = () => (
+  <div
+    style={{
+      minHeight: '60vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      gap: '1rem',
+      color: 'var(--text-muted)',
+    }}
+    aria-label="جارٍ تحميل الصفحة..."
+  >
+    <div
+      style={{
+        width: '40px',
+        height: '40px',
+        border: '2px solid rgba(195, 164, 111, 0.2)',
+        borderTopColor: 'var(--accent-secondary)',
+        borderRadius: '50%',
+        animation: 'spin 0.8s linear infinite',
+      }}
+    />
+    <span style={{ fontSize: '0.85rem' }}>مِيثاق للمحاماة والاستشارات...</span>
+    <style>{`
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    `}</style>
+  </div>
+);
 
 export const App: React.FC = () => {
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
-  const [selectedArticle, setSelectedArticle] = useState<InsightArticle | null>(null);
 
   const handleOpenConsultation = () => setIsConsultationOpen(true);
   const handleCloseConsultation = () => setIsConsultationOpen(false);
 
-  const handleSelectArticle = (article: InsightArticle) => setSelectedArticle(article);
-  const handleCloseArticle = () => setSelectedArticle(null);
-
   return (
-    <div className="app-root">
-      {/* SECTION 01 — HEADER & NAVIGATION */}
-      <Header onOpenConsultation={handleOpenConsultation} />
+    <Router>
+      <div className="app-root">
+        {/* Scroll restoration on route change */}
+        <ScrollToTop />
 
-      <main id="main-content">
-        {/* SECTION 02 — HERO WITH 3D EXPERIENCE */}
-        <Hero onOpenConsultation={handleOpenConsultation} />
+        {/* Branded page transition overlay */}
+        <PageTransition />
 
-        {/* SECTION 03 — INSTITUTIONAL POSITIONING */}
-        <Positioning />
+        {/* Persistent Institutional Header */}
+        <Header onOpenConsultation={handleOpenConsultation} />
 
-        {/* SECTION 04 — ABOUT THE FIRM */}
-        <About />
+        {/* Main Content Area with Route Splitting */}
+        <main id="main-content">
+          <Suspense fallback={<PageLoadingFallback />}>
+            <Routes>
+              {/* Home */}
+              <Route
+                path="/"
+                element={<HomePage onOpenConsultation={handleOpenConsultation} />}
+              />
 
-        {/* SECTION 05 — PRACTICE AREAS */}
-        <PracticeAreas onOpenConsultation={handleOpenConsultation} />
+              {/* About */}
+              <Route
+                path="/about"
+                element={<AboutPage onOpenConsultation={handleOpenConsultation} />}
+              />
 
-        {/* SECTION 06 — WHY CHOOSE US */}
-        <WhyUs />
+              {/* Services Directory */}
+              <Route
+                path="/services"
+                element={
+                  <ServicesIndexPage onOpenConsultation={handleOpenConsultation} />
+                }
+              />
 
-        {/* SECTION 07 — WORKING METHODOLOGY */}
-        <Methodology />
+              {/* Individual Service Detail Pages */}
+              <Route
+                path="/services/:slug"
+                element={
+                  <ServiceDetailPage onOpenConsultation={handleOpenConsultation} />
+                }
+              />
 
-        {/* SECTION 08 — LEGAL TEAM */}
-        <Team />
+              {/* Working Methodology */}
+              <Route
+                path="/approach"
+                element={<ApproachPage onOpenConsultation={handleOpenConsultation} />}
+              />
 
-        {/* SECTION 09 — INSTITUTIONAL VALUES / CORE PRINCIPLES */}
-        <Values />
+              {/* Legal Team */}
+              <Route
+                path="/team"
+                element={<TeamPage onOpenConsultation={handleOpenConsultation} />}
+              />
 
-        {/* SECTION 10 — LEGAL INSIGHTS / ARTICLES */}
-        <Insights onSelectArticle={handleSelectArticle} />
+              {/* Legal Insights Hub */}
+              <Route
+                path="/insights"
+                element={
+                  <InsightsIndexPage onOpenConsultation={handleOpenConsultation} />
+                }
+              />
 
-        {/* SECTION 11 — FAQ */}
-        <FAQ />
+              {/* Individual Article Reading Pages */}
+              <Route
+                path="/insights/:slug"
+                element={
+                  <ArticleDetailPage onOpenConsultation={handleOpenConsultation} />
+                }
+              />
 
-        {/* SECTION 12 — FINAL CONVERSION CTA */}
-        <CTA onOpenConsultation={handleOpenConsultation} />
+              {/* Contact Page */}
+              <Route
+                path="/contact"
+                element={<ContactPage onOpenConsultation={handleOpenConsultation} />}
+              />
 
-        {/* SECTION 13 — CONTACT */}
-        <Contact />
-      </main>
+              {/* Consultation Intake Page */}
+              <Route path="/consultation" element={<ConsultationPage />} />
 
-      {/* SECTION 14 — FOOTER */}
-      <Footer />
+              {/* FAQ Page */}
+              <Route
+                path="/faq"
+                element={<FAQPage onOpenConsultation={handleOpenConsultation} />}
+              />
 
-      {/* INTERACTIVE MODALS */}
-      <ConsultationModal
-        isOpen={isConsultationOpen}
-        onClose={handleCloseConsultation}
-      />
+              {/* Privacy Policy */}
+              <Route path="/privacy" element={<PrivacyPage />} />
 
-      <ArticleModal
-        article={selectedArticle}
-        onClose={handleCloseArticle}
-      />
-    </div>
+              {/* 404 Not Found Catch-All */}
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Suspense>
+        </main>
+
+        {/* Persistent Footer */}
+        <Footer />
+
+        {/* Global Quick Consultation Modal */}
+        <ConsultationModal
+          isOpen={isConsultationOpen}
+          onClose={handleCloseConsultation}
+        />
+      </div>
+    </Router>
   );
 };
 

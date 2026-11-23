@@ -9,25 +9,20 @@ gsap.registerPlugin(ScrollTrigger);
 
 export const Hero3DScene: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const [hasWebGL, setHasWebGL] = useState<boolean>(true);
+  const [hasWebGL] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true;
+    try {
+      const canvasTest = document.createElement('canvas');
+      return Boolean(canvasTest.getContext('webgl') || canvasTest.getContext('experimental-webgl'));
+    } catch {
+      return false;
+    }
+  });
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     const container = mountRef.current;
-    if (!container) return;
-
-    // Check WebGL availability
-    try {
-      const canvasTest = document.createElement('canvas');
-      const gl = canvasTest.getContext('webgl') || canvasTest.getContext('experimental-webgl');
-      if (!gl) {
-        setHasWebGL(false);
-        return;
-      }
-    } catch {
-      setHasWebGL(false);
-      return;
-    }
+    if (!container || !hasWebGL) return;
 
     let isDisposed = false;
     let animationFrameId: number;
@@ -388,7 +383,7 @@ export const Hero3DScene: React.FC = () => {
       }
       renderer.dispose();
     };
-  }, []);
+  }, [hasWebGL]);
 
   if (!hasWebGL) {
     return <ThreeFallback />;

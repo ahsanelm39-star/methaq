@@ -13,7 +13,9 @@ interface Values3DSceneProps {
 export const Values3DScene: React.FC<Values3DSceneProps> = ({ activeValueIndex }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef<number>(activeValueIndex);
-  activeIndexRef.current = activeValueIndex;
+  useEffect(() => {
+    activeIndexRef.current = activeValueIndex;
+  }, [activeValueIndex]);
 
   useEffect(() => {
     const container = mountRef.current;

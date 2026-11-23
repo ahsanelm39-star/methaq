@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, CheckCircle, ShieldCheck, Video, Building, Calendar, ArrowLeft } from 'lucide-react';
+import { X, CheckCircle, Video, Building, Calendar, ArrowLeft, Shield } from 'lucide-react';
 import { Button } from './Button';
 import './ConsultationModal.css';
 
@@ -49,17 +49,17 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
   return (
     <div className="consult-modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
       <div className="consult-modal-box" onClick={(e) => e.stopPropagation()}>
-        <button className="consult-close-btn" onClick={onClose} aria-label="إغلاق">
+        <button className="consult-close-btn" onClick={onClose} aria-label="إغلاق النافذة">
           <X size={18} />
         </button>
 
         {!submitted ? (
           <>
             <div className="consult-modal-header">
-              <span className="consult-badge">حجز موعد استشارة رسمية</span>
+              <span className="consult-badge">طلب استشارة سريعة</span>
               <h2 className="consult-title">ابدأ ترتيب جلستك القانونية</h2>
               <p className="consult-desc">
-                تنعقد جلسات الاستشارة برعاية مستشار مختص بموضوع مسألتك، مع ضمان السرية التامة.
+                جلسة استماع وتأطير أولية مع مستشار مختص، مع فحص استباقي لتضارب المصالح.
               </p>
             </div>
 
@@ -86,7 +86,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
                   <Building size={18} className="type-icon" />
                   <div className="type-text">
                     <span className="type-title">حضور بمقر المكتب</span>
-                    <span className="type-sub">الرياض — حي النخيل</span>
+                    <span className="type-sub">جلسة تداول شخصية</span>
                   </div>
                 </button>
               </div>
@@ -115,7 +115,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
                   id="modal-phone"
                   type="tel"
                   required
-                  placeholder="05XXXXXXXX أو +966..."
+                  placeholder="+966 ..."
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   className="consult-input"
@@ -133,23 +133,23 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
                   onChange={(e) => setTopic(e.target.value)}
                   className="consult-select"
                 >
-                  <option value="commercial">القانون التجاري والشركات</option>
-                  <option value="contracts">صياغة ومراجعة العقود والاتفاقيات</option>
-                  <option value="litigation">التقاضي والتحكيم وتسوية النزاعات</option>
-                  <option value="realestate">القانون العقاري والتطوير</option>
-                  <option value="ip">الملكية الفكرية والابتكار</option>
-                  <option value="general">استشارة مؤسسية عامة</option>
+                  <option value="commercial">قانون الشركات والأعمال</option>
+                  <option value="contracts">العقود والاتفاقيات التجارية</option>
+                  <option value="litigation">التقاضي وتسوية المنازعات</option>
+                  <option value="realestate">العقارات والإنشاءات الهندسية</option>
+                  <option value="labor">العمل والموارد البشرية</option>
+                  <option value="ip">الملكية الفكرية والتقنية</option>
                 </select>
               </div>
 
               <div className="consult-privacy-note">
-                <ShieldCheck size={16} className="note-icon" />
-                <span>نلتزم بأعلى معايير السرية المهنية وعدم إفشاء البيانات وفقًا للأنظمة.</span>
+                <Shield size={16} className="note-icon" />
+                <span>نموذج محاكاة تفاعلي: لا يتم إرسال البيانات المدخلة لخوادم خارجية.</span>
               </div>
 
               <div className="consult-form-actions">
                 <Button type="submit" variant="primary" fullWidth icon={<Calendar size={18} />}>
-                  تأكيد إرسال طلب الموعد
+                  تأكيد إرسال طلب الموعد (محاكاة)
                 </Button>
               </div>
             </form>
@@ -159,15 +159,16 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
             <div className="success-icon-ring">
               <CheckCircle size={44} className="success-icon" />
             </div>
-            <h3 className="success-title">تم استلام طلب الاستشارة بنجاح</h3>
+            <h3 className="success-title">تم استلام طلب الاستشارة بنجاح (محاكاة تجريبية)</h3>
             <p className="success-text">
-              شكرًا لثقتكم بمِيثاق. تم تسجيل طلبكم وسيقوم مسؤول التنسيق القانوني بالتواصل معكم هاتفيًا
-              لتأكيد الموعد المناسب وتزويدكم برابط الجلسة أو تفاصيل الزيارة.
+              شكرًا لتفاعلكم مع مِيثاق. تم تسجيل الطلب ضمن بيئة العرض التوضيحي، والبيانات والمسارات المعروضة افتراضية لغايات التصميم والمحاكاة.
             </p>
             <div className="success-details-card">
               <div className="success-row">
                 <span className="success-row-label">نوع اللقاء:</span>
-                <span className="success-row-val">{meetingType === 'remote' ? 'اتصال مرئي مشفر' : 'حضور بمقر المكتب'}</span>
+                <span className="success-row-val">
+                  {meetingType === 'remote' ? 'اتصال مرئي مشفر' : 'حضور بمقر المكتب'}
+                </span>
               </div>
               <div className="success-row">
                 <span className="success-row-label">مقدم الطلب:</span>
@@ -175,11 +176,11 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
               </div>
               <div className="success-row">
                 <span className="success-row-label">حالة الطلب:</span>
-                <span className="success-row-val success-status">قيد المراجعة والتنسيق</span>
+                <span className="success-row-val success-status">محاكاة ناجحة</span>
               </div>
             </div>
             <Button variant="secondary" onClick={resetForm} icon={<ArrowLeft size={16} />}>
-              إغلاق ومتابعة تصفح الموقع
+              إغلاق ومتابعة التصفح
             </Button>
           </div>
         )}

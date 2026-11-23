@@ -13,7 +13,9 @@ interface Methodology3DSceneProps {
 export const Methodology3DScene: React.FC<Methodology3DSceneProps> = ({ activeStep }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const activeStepRef = useRef<number>(activeStep);
-  activeStepRef.current = activeStep;
+  useEffect(() => {
+    activeStepRef.current = activeStep;
+  }, [activeStep]);
 
   useEffect(() => {
     const container = mountRef.current;

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpLeft, Phone } from 'lucide-react';
-import { NAV_ITEMS, BRAND_INFO } from '../../constants/content';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Menu, X, ArrowUpLeft, Shield, ChevronDown } from 'lucide-react';
+import { MAIN_NAV_ITEMS, INSTITUTIONAL_INFO } from '../../data/navigation';
+import { PRACTICE_AREAS } from '../../data/services';
 import { Button } from '../ui/Button';
 import './Header.css';
 
@@ -11,34 +13,26 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onOpenConsultation }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
+  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 40) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-
-      // Track active section for nav highlight from the 6 navigation items
-      const sections = NAV_ITEMS.map((item) => item.id);
-      for (const id of [...sections].reverse()) {
-        const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 200) {
-            setActiveSection(id);
-            break;
-          }
-        }
-      }
+      setIsScrolled(window.scrollY > 30);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close menus on route change
+  const [prevPathname, setPrevPathname] = useState(location.pathname);
+  if (prevPathname !== location.pathname) {
+    setPrevPathname(location.pathname);
+    setMobileMenuOpen(false);
+    setServicesDropdownOpen(false);
+  }
 
   // Handle body scroll locking and Escape key for mobile menu
   useEffect(() => {
@@ -51,132 +45,148 @@ export const Header: React.FC<HeaderProps> = ({ onOpenConsultation }) => {
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && mobileMenuOpen) {
-        setMobileMenuOpen(false);
-      }
-    };
-
-    const handleResize = () => {
-      if (window.innerWidth > 1040 && mobileMenuOpen) {
-        setMobileMenuOpen(false);
+      if (e.key === 'Escape') {
+        if (mobileMenuOpen) setMobileMenuOpen(false);
+        if (servicesDropdownOpen) setServicesDropdownOpen(false);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('resize', handleResize);
-
     return () => {
       document.body.style.overflow = '';
       document.body.style.touchAction = '';
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('resize', handleResize);
     };
-  }, [mobileMenuOpen]);
-
-  const closeMobileMenu = () => setMobileMenuOpen(false);
+  }, [mobileMenuOpen, servicesDropdownOpen]);
 
   return (
     <>
       <header className={`site-header ${isScrolled ? 'header-scrolled' : ''}`}>
         <div className="container header-container">
           {/* Brand Logo */}
-          <a href="#hero" className="brand-logo" aria-label="مِيثاق للمحاماة والاستشارات القانونية">
+          <Link to="/" className="brand-logo" aria-label="مِيثاق للمحاماة والاستشارات القانونية — الصفحة الرئيسية">
             <div className="logo-symbol" aria-hidden="true">
-              <svg viewBox="0 0 40 40" width="36" height="36" fill="none">
+              <svg viewBox="0 0 40 40" width="38" height="38" fill="none">
                 <rect
                   x="0.5"
                   y="0.5"
                   width="39"
                   height="39"
                   rx="8"
-                  stroke="url(#logoGoldGrad)"
+                  stroke="url(#headerLogoGoldGrad)"
                   strokeWidth="1"
                   fill="#0D1420"
                 />
                 <path
                   d="M12 30V13C12 10.79 13.79 9 16 9H24C26.21 9 28 10.79 28 13V30"
-                  stroke="url(#logoGoldGrad)"
+                  stroke="url(#headerLogoGoldGrad)"
                   strokeWidth="2"
                   strokeLinecap="round"
                 />
-                <path
-                  d="M16 30V17C16 15.9 16.9 15 18 15H22C23.1 15 24 15.9 24 17V30"
-                  stroke="#D0B783"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-                <line
-                  x1="9"
-                  y1="30"
-                  x2="31"
-                  y2="30"
-                  stroke="url(#logoGoldGrad)"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <circle cx="20" cy="21" r="2" fill="#D0B783" />
+                <circle cx="20" cy="18" r="3.5" fill="url(#headerLogoGoldGrad)" />
+                <path d="M12 25H28" stroke="url(#headerLogoGoldGrad)" strokeWidth="1.5" strokeLinecap="round" />
                 <defs>
-                  <linearGradient id="logoGoldGrad" x1="9" y1="9" x2="31" y2="31" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#F2F0E9" />
+                  <linearGradient id="headerLogoGoldGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#F5E8CE" />
                     <stop offset="0.5" stopColor="#D0B783" />
-                    <stop offset="1" stopColor="#B99A65" />
+                    <stop offset="1" stopColor="#8C6F38" />
                   </linearGradient>
                 </defs>
               </svg>
             </div>
             <div className="brand-titles">
-              <span className="brand-name">{BRAND_INFO.name}</span>
-              <span className="brand-subtitle">{BRAND_INFO.subtitle}</span>
+              <span className="brand-name">{INSTITUTIONAL_INFO.name}</span>
+              <span className="brand-subtitle">{INSTITUTIONAL_INFO.subtitle}</span>
             </div>
-          </a>
+          </Link>
 
-          {/* Desktop Navigation — Exactly 6 items */}
-          <nav className="desktop-nav" aria-label="القائمة الرئيسية">
+          {/* Desktop Navigation */}
+          <nav className="desktop-nav" aria-label="التنقل الرئيسي">
             <ul className="nav-list">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.id} className="nav-item">
-                  <a
-                    href={item.href}
-                    className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
-                  >
-                    {item.label}
-                    {activeSection === item.id && <span className="active-dot" aria-hidden="true" />}
-                  </a>
-                </li>
-              ))}
+              {MAIN_NAV_ITEMS.map((item) => {
+                if (item.id === 'services') {
+                  return (
+                    <li
+                      key={item.id}
+                      className="nav-item-has-dropdown"
+                      onMouseEnter={() => setServicesDropdownOpen(true)}
+                      onMouseLeave={() => setServicesDropdownOpen(false)}
+                    >
+                      <NavLink
+                        to={item.href}
+                        className={({ isActive }) =>
+                          `nav-link ${isActive || location.pathname.startsWith('/services') ? 'active' : ''}`
+                        }
+                      >
+                        <span>{item.label}</span>
+                        <ChevronDown size={14} className="dropdown-caret" />
+                      </NavLink>
+
+                      {servicesDropdownOpen && (
+                        <div className="services-nav-dropdown" role="menu">
+                          <div className="dropdown-header">
+                            <span className="dropdown-title">مجالات الممارسة القانونية</span>
+                            <Link to="/services" className="dropdown-all-link">
+                              عرض كافة الخدمات
+                            </Link>
+                          </div>
+                          <div className="dropdown-grid">
+                            {PRACTICE_AREAS.map((service) => (
+                              <Link
+                                key={service.id}
+                                to={`/services/${service.slug}`}
+                                className="dropdown-service-item"
+                                role="menuitem"
+                              >
+                                <span className="dropdown-service-num">{service.number}</span>
+                                <div className="dropdown-service-text">
+                                  <span className="dropdown-service-name">{service.title}</span>
+                                  <span className="dropdown-service-sub">{service.subtitle}</span>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </li>
+                  );
+                }
+
+                return (
+                  <li key={item.id}>
+                    <NavLink
+                      to={item.href}
+                      end={item.href === '/'}
+                      className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                    >
+                      {item.label}
+                    </NavLink>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
-          {/* Header Action & Mobile Toggle */}
+          {/* Action Header Button */}
           <div className="header-actions">
-            <div className="header-contact-quick">
-              <a href={`tel:${BRAND_INFO.phone}`} className="quick-phone-link" aria-label="الاتصال بالمكتب">
-                <Phone size={14} className="phone-icon" />
-                <span className="quick-phone-text" dir="ltr">
-                  {BRAND_INFO.phone}
-                </span>
-              </a>
-            </div>
-
             <Button
               variant="primary"
               size="sm"
               onClick={onOpenConsultation}
-              icon={<ArrowUpLeft size={16} />}
-              iconPosition="end"
-              className="header-cta-btn"
+              className="consultation-btn header-consult-btn"
+              aria-label="طلب استشارة قانونية"
             >
-              اطلب استشارة
+              <span>طلب استشارة</span>
+              <ArrowUpLeft size={16} aria-hidden="true" />
             </Button>
 
-            {/* Mobile Menu Toggle Button */}
+            {/* Mobile Menu Trigger */}
             <button
               type="button"
-              className="mobile-menu-btn"
-              onClick={() => setMobileMenuOpen((prev) => !prev)}
-              aria-label={mobileMenuOpen ? 'إغلاق القائمة' : 'فتح القائمة'}
+              className="mobile-toggle-btn"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? 'إغلاق القائمة' : 'فتح القائمة الرئيسية'}
               aria-expanded={mobileMenuOpen}
-              aria-controls="mobile-nav-drawer"
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -184,59 +194,81 @@ export const Header: React.FC<HeaderProps> = ({ onOpenConsultation }) => {
         </div>
       </header>
 
-      {/* Mobile Backdrop Overlay */}
+      {/* Mobile Drawer Navigation */}
       <div
-        className={`mobile-nav-backdrop ${mobileMenuOpen ? 'open' : ''}`}
-        onClick={closeMobileMenu}
-        aria-hidden="true"
-      />
-
-      {/* Mobile Drawer Menu — Outside <header> to prevent backdrop-filter containing block trap */}
-      <div
-        id="mobile-nav-drawer"
-        className={`mobile-nav-drawer ${mobileMenuOpen ? 'open' : ''}`}
+        className={`mobile-menu-drawer ${mobileMenuOpen ? 'open' : ''}`}
         aria-hidden={!mobileMenuOpen}
-        role="dialog"
-        aria-modal="true"
-        aria-label="القائمة الرئيسية"
       >
-        <div className="mobile-drawer-inner">
-          <ul className="mobile-nav-list">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.id} className="mobile-nav-item">
-                <a
-                  href={item.href}
-                  className={`mobile-nav-link ${activeSection === item.id ? 'active' : ''}`}
-                  onClick={closeMobileMenu}
+        <div className="mobile-drawer-backdrop" onClick={() => setMobileMenuOpen(false)} />
+        <div className="mobile-drawer-panel">
+          <div className="mobile-drawer-header">
+            <div className="brand-logo">
+              <span className="brand-name">{INSTITUTIONAL_INFO.name}</span>
+              <span className="brand-subtitle">{INSTITUTIONAL_INFO.subtitle}</span>
+            </div>
+            <button
+              type="button"
+              className="mobile-close-btn"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="إغلاق القائمة"
+            >
+              <X size={22} />
+            </button>
+          </div>
+
+          <nav className="mobile-nav" aria-label="التنقل عبر الجوال">
+            <ul className="mobile-nav-list">
+              {MAIN_NAV_ITEMS.map((item) => (
+                <li key={item.id} className="mobile-nav-item">
+                  <NavLink
+                    to={item.href}
+                    end={item.href === '/'}
+                    className={({ isActive }) =>
+                      `mobile-nav-link ${isActive ? 'active' : ''}`
+                    }
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span>{item.label}</span>
+                  </NavLink>
+                </li>
+              ))}
+              <li className="mobile-nav-item">
+                <NavLink
+                  to="/consultation"
+                  className="mobile-nav-link"
+                  onClick={() => setMobileMenuOpen(false)}
                 >
-                  <span>{item.label}</span>
-                  <span className="link-arrow">←</span>
-                </a>
+                  <span>طلب استشارة (النموذج الكامل)</span>
+                </NavLink>
               </li>
-            ))}
-          </ul>
+              <li className="mobile-nav-item">
+                <NavLink
+                  to="/faq"
+                  className="mobile-nav-link"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span>الأسئلة الشائعة</span>
+                </NavLink>
+              </li>
+            </ul>
+          </nav>
 
           <div className="mobile-drawer-footer">
             <Button
               variant="primary"
-              fullWidth
               size="md"
+              fullWidth
               onClick={() => {
-                closeMobileMenu();
+                setMobileMenuOpen(false);
                 onOpenConsultation();
               }}
-              icon={<ArrowUpLeft size={18} />}
-              iconPosition="end"
             >
-              اطلب استشارة
+              <span>طلب استشارة سريعة</span>
+              <ArrowUpLeft size={18} />
             </Button>
-
-            <div className="mobile-drawer-contact">
-              <span className="drawer-contact-title">للتواصل المباشر والاستفسارات:</span>
-              <a href={`tel:${BRAND_INFO.phone}`} className="drawer-phone" dir="ltr">
-                {BRAND_INFO.phone}
-              </a>
-              <span className="drawer-hours">{BRAND_INFO.workingHours}</span>
+            <div className="mobile-drawer-disclosure">
+              <Shield size={14} />
+              <span>مِيثاق — نموذج رقمي تجريبي مستقل</span>
             </div>
           </div>
         </div>

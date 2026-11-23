@@ -1,0 +1,168 @@
+.approach-page-root {
+  display: flex;
+  flex-direction: column;
+}
+
+.approach-steps-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  position: relative;
+}
+
+.approach-step-card {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 2rem;
+  padding: clamp(2rem, 4vw, 3rem);
+  position: relative;
+}
+
+.step-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.step-number-badge {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent-secondary);
+  background: rgba(185, 154, 101, 0.12);
+  border: 1px solid var(--border-medium);
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.step-icon-box {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-connector-line {
+  position: absolute;
+  top: 100px;
+  bottom: -40px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--border-medium) 0%, rgba(195, 164, 111, 0.05) 100%);
+}
+
+.step-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.step-title {
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.step-lead {
+  font-size: var(--font-size-base);
+  color: var(--accent-secondary);
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.step-desc {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  line-height: 1.85;
+  margin-bottom: 1.5rem;
+}
+
+.step-deliverables-box {
+  background: rgba(8, 11, 18, 0.5);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem 1.5rem;
+}
+
+.deliverables-heading {
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.deliverables-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.deliverable-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.deliv-icon {
+  color: var(--accent-secondary);
+  flex-shrink: 0;
+}
+
+/* Commitments Card */
+.approach-commitments-card {
+  padding: clamp(2.5rem, 5vw, 4rem);
+  background: linear-gradient(135deg, rgba(22, 36, 56, 0.7) 0%, rgba(8, 11, 18, 0.95) 100%);
+  border-color: var(--border-medium);
+}
+
+.commitments-title {
+  font-size: var(--font-size-2xl);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.commitments-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.commitment-heading {
+  font-size: 1.15rem;
+  color: var(--accent-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.commitment-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .approach-step-card {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .step-aside {
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+  }
+  .step-connector-line {
+    display: none;
+  }
+  .deliverables-list {
+    grid-template-columns: 1fr;
+  }
+  .commitments-grid {
+    grid-template-columns: 1fr;
+  }
+}

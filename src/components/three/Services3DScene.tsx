@@ -13,7 +13,9 @@ interface Services3DSceneProps {
 export const Services3DScene: React.FC<Services3DSceneProps> = ({ activeServiceIndex }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef<number>(activeServiceIndex);
-  activeIndexRef.current = activeServiceIndex;
+  useEffect(() => {
+    activeIndexRef.current = activeServiceIndex;
+  }, [activeServiceIndex]);
 
   useEffect(() => {
     const container = mountRef.current;
