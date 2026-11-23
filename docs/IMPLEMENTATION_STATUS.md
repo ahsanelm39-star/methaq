@@ -169,11 +169,14 @@
   10. **Pillar Card Title Sizing on Desktop:** Optimized `.pillar-title` font size to `clamp(0.95rem, 1.15vw, 1.05rem)` and adjusted card padding to prevent single-word orphan line-breaks on 4-column desktop grids.
   11. **Footer Heading Sizing:** Refined `.footer-brand-name` to `1.25rem` and `.footer-col-title` to `0.875rem` for elegant visual balance.
   12. **Universal 100% Width CTA Buttons:** Implemented responsive rules across all CTA sections (`.about-cta-buttons`, `.services-cta-card`, `.service-cta-actions`, `.home-cta-banner`, etc.) ensuring all buttons expand to 100% width on mobile screens while strictly respecting container bounds (`box-sizing: border-box; max-width: 100%`) without overflowing cards.
+  13. **Mobile Consultation Modal Sizing & Scrolling:** Fixed modal clipping on mobile by making `.consult-modal-backdrop` and `.consult-modal-box` cleanly scrollable (`max-height: calc(100dvh - 1.5rem); overflow-y: auto`), tightening vertical spacing and padding, and optimizing the meeting selector into a compact 2-column grid. The submit button is completely visible, accessible, and never cut off.
+  14. **Universal Form Primitives & Consultation Page Redesign:** Established site-wide form primitives in `global.css` (`.form-group`, `.form-row`, `.form-label`, `.form-input`, `.form-select`, `.form-textarea`, `.form-error-msg`) and polished `ConsultationPage.css`. Solved the unstyled form issue on `/consultation` across all viewports: verified 2 balanced columns on desktop (1280px) and neat, single-column full-width layout on mobile (390px) with custom gold arrow select dropdowns, responsive radio cards, and zero horizontal or vertical defects.
 - **Remaining work:** None. Project is functionally complete, fully code-split, and verified.
 
 ### E. Tests Performed & Results
-- `npm run build` (`tsc -b && vite build`): **PASSED** (0 errors, 2.12s, 0 TypeScript issues).
+- `npm run build` (`tsc -b && vite build`): **PASSED** (0 errors, 2.57s, 0 TypeScript issues).
 - `npm run lint` (`oxlint`): **PASSED** (0 errors, 0 warnings across 63 files).
+- Subagent visual inspection across viewports (390x800 and 1280x800): **PASSED** (Modal and Consultation Form validated).
 - Route integrity & article count check: **PASSED** (all 13 routes resolve; exactly 3 articles verified).
 - SPA rewrite verification: **PASSED** (`vercel.json` rewrites all requests to `/index.html`).
 
