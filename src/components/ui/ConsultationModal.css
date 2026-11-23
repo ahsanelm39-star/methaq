@@ -64,6 +64,7 @@
 .consult-title {
   font-size: 1.6rem;
   color: var(--text-primary);
+  line-height: 1.38;
   margin-bottom: 0.5rem;
 }
 

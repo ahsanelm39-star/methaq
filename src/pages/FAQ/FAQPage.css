@@ -40,6 +40,7 @@
   color: var(--text-primary);
   font-size: 1.15rem;
   font-weight: 600;
+  line-height: 1.48;
   cursor: pointer;
   background: transparent;
   gap: 1.25rem;

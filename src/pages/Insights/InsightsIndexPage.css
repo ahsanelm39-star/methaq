@@ -86,7 +86,7 @@
   font-size: var(--font-size-2xl);
   color: var(--text-primary);
   margin-bottom: 1.25rem;
-  line-height: 1.4;
+  line-height: 1.48;
 }
 
 .featured-article-title a:hover {
@@ -201,7 +201,7 @@
   font-size: 1.3rem;
   color: var(--text-primary);
   margin-bottom: 1rem;
-  line-height: 1.45;
+  line-height: 1.48;
 }
 
 .article-item-title a:hover {

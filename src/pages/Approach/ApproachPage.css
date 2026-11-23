@@ -64,6 +64,7 @@
 .step-title {
   font-size: var(--font-size-xl);
   color: var(--text-primary);
+  line-height: 1.45;
   margin-bottom: 0.5rem;
 }
 

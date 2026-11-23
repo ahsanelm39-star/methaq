@@ -375,6 +375,13 @@
   margin-inline: auto;
 }
 
+.service-cta-inner .cta-title {
+  font-size: var(--font-size-2xl);
+  color: var(--text-primary);
+  line-height: 1.45;
+  margin-bottom: 1rem;
+}
+
 .service-cta-actions {
   display: flex;
   justify-content: center;
