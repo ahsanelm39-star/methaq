@@ -152,7 +152,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenConsultation }) => {
 
               <div className="home-intro-stats">
                 <div className="stat-card">
-                  <span className="stat-number">100%</span>
+                  <span className="stat-number number100">100%</span>
                   <span className="stat-label">مطابقة نظامية وفحص دقيق للوثائق</span>
                 </div>
                 <div className="stat-card">
